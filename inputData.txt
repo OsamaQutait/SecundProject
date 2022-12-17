@@ -1,0 +1,9 @@
+Male 6
+Female 4
+Bx 1
+Ix 1
+Tx 1
+Rx 1
+Unserved 4
+Unhappy 2
+Satisfied 5
