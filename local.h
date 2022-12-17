@@ -5,5 +5,9 @@
 #define SECUNDPROJECT_LOCAL_H
 #include <iostream>
 using namespace std;
-
+#include <fstream>
+#include <string>
+#include <vector>
+#include <unordered_map>
+#include <bits/stdc++.h>
 #endif //SECUNDPROJECT_LOCAL_H
