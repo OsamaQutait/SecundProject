@@ -22,6 +22,18 @@ int main(int argc, char *argv[]) {
         data_file.close();
     }
     // end reading
+    char mail[3], femail[3], bx[3], ix[3], tx[3],
+         rx[3], unserved[3], unhappy[3], satisfied[3];
+
+    sprintf(mail, "%d", data["Male"]);
+    sprintf(femail, "%d", data["Female"]);
+    sprintf(bx, "%d", data["Bx"]);
+    sprintf(ix, "%d", data["Ix"]);
+    sprintf(tx, "%d", data["Tx"]);
+    sprintf(rx, "%d", data["Rx"]);
+    sprintf(unserved, "%d", data["Unserved"]);
+    sprintf(unhappy, "%d", data["Unhappy"]);
+    sprintf(satisfied, "%d", data["Satisfied"]);
 
     //generate the mail people
     for (int i = 0; i < data["Male"]; ++i) {

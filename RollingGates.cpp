@@ -10,7 +10,6 @@ int main(int argc, char *argv[]) {
     << wait << " second" << endl;
     fflush(stdout);
 //    kill(getpid(), SIGKILL);
-//    exit(0);
     return 0;
 }
 
