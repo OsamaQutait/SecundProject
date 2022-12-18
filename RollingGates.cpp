@@ -3,7 +3,14 @@
 int generate_waiting_time(int lower, int upper);
 
 int main(int argc, char *argv[]) {
-
+    int wait = generate_waiting_time(1, 5);
+    sleep(wait);
+    cout << "person with id : " << getpid() <<
+    " reach the rolling gate with gender " << argv[1] << " with waiting time :"
+    << wait << " second" << endl;
+    fflush(stdout);
+//    kill(getpid(), SIGKILL);
+//    exit(0);
     return 0;
 }
 

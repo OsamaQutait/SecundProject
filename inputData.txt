@@ -1,5 +1,5 @@
-Male 6
-Female 4
+Male 4
+Female 6
 Bx 1
 Ix 1
 Tx 1

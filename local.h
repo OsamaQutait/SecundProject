@@ -12,6 +12,7 @@ using namespace std;
 #include <sys/types.h>
 #include <unistd.h>
 #include <bits/stdc++.h>
+#include <sys/wait.h>
 #define RED     "\033[31m"      /* Red */
 #define GREEN   "\033[32m"      /* Green */
 #define BLUE    "\033[34m"      /* Blue */
