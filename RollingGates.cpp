@@ -4,6 +4,7 @@ int generate_waiting_time(int lower, int upper);
 
 int main(int argc, char *argv[]) {
 //    sleep(15); // for real code , for test I will put it 2 ,to minimize waiting time
+    sleep(2);
     int wait = generate_waiting_time(1, 10);
     //his/her waiting time is grater pass at first to the queue
     sleep(11-wait);
