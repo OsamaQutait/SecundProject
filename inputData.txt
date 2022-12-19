@@ -4,6 +4,7 @@ Bx 1
 Ix 1
 Tx 1
 Rx 1
+Hall_max_people 20
 Unserved 4
 Unhappy 1
 Satisfied 5
