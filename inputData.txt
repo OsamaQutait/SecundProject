@@ -8,3 +8,5 @@ Hall_max_people 20
 Unserved 4
 Unhappy 1
 Satisfied 5
+queues_mail 2
+queues_female 3
