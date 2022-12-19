@@ -1,5 +1,9 @@
 #include "local.h"
 
+const char *type;
+priority_queue<pid_t> mail_queue;
+priority_queue<pid_t> female_queue;
+
 int generate_waiting_time(int lower, int upper);
 
 int main(int argc, char *argv[]) {
@@ -21,8 +25,20 @@ int main(int argc, char *argv[]) {
         data_file.close();
     }
     // end reading
+    type = argv[1];
+    if (!strcmp(argv[1], "mail")){
+        if (mail_queue.size() > data["queues_mail"]){
 
+        } else {
 
+        }
+    } else if (!strcmp(argv[1], "female")){
+        if (female_queue.size() > data["queues_mail"]){
+
+        } else {
+
+        }
+    }
 
     return 0;
 }

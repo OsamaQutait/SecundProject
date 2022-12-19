@@ -1,27 +1,26 @@
 #include "local.h"
 
+pid_t rolling_gate_man, rolling_gate_woman;
+const char *type;
+priority_queue<pid_t> mail_queue;
+priority_queue<pid_t> female_queue;
+
 int generate_waiting_time(int lower, int upper);
+void handle_sigusr1(int sig);
+void handle_sigusr2(int sig);
 
 int main(int argc, char *argv[]) {
-    unordered_map<string, int> data;
-    // read file
-    string line, word, num;
-    fstream data_file;
-    data_file.open("inputData.txt", ios::in);
-    if (!data_file){
-        perror("File not created!");
-        exit(-1);
-    } else {
-        while (getline(data_file, line)){
-            stringstream ss(line);
-            ss >> word;
-            ss >> num;
-            data[word] = stoi(num); // casting to integer
-        }
-        data_file.close();
+    type = argv[1];
+    if (!strcmp(type, "rolling_gate_man")){
+        rolling_gate_man = getpid();
+        signal(SIGUSR1, &handle_sigusr1);
+        while (1);
     }
-    // end reading
-//    sleep(15); // for real code , for test I will put it 2 ,to minimize waiting time
+    if (!strcmp(type, "rolling_gate_woman")){
+        rolling_gate_woman = getpid();
+        signal(SIGUSR2, &handle_sigusr2);
+        while (1);
+    }
     sleep(2);
     int wait = generate_waiting_time(1, 10);
     //his/her waiting time is grater pass at first to the queue
@@ -30,6 +29,26 @@ int main(int argc, char *argv[]) {
     " reach the rolling gate with gender " << argv[1] << " with waiting time :"
     << wait  << " second" << endl;
     fflush(stdout);
+    if (!strcmp(type, "mail")){
+        mail_queue.push(getpid());
+    } else if (!strcmp(type, "female")){
+        female_queue.push(getpid());
+    }
+    while (1);
+//    if (!strcmp(type, "mail")){
+//        if (execl("./MetalDetector", "MetalDetector", "mail", (char *)NULL) == -1){
+//            perror("Error in execlp the mail people");
+//            exit(-2);
+//        }
+//    } else if (!strcmp(type, "female")){
+//        if (execl("./MetalDetector", "MetalDetector", "female", (char *)NULL) == -1){
+//            perror("Error in execlp the female people");
+//            exit(-2);
+//        }
+//    } else {
+//        cout << "invalid gender" << endl;
+//        exit(-3);
+//    }
     return 0;
 }
 
@@ -42,4 +61,30 @@ int generate_waiting_time(int lower, int upper){
     srand(s);
     int num = (rand() % (upper - lower + 1)) + lower;
     return num;
+}
+
+void handle_sigusr1(int sig){
+    char rolling_gate_man_s[10];
+    sprintf(rolling_gate_man_s, "%d", rolling_gate_man);
+    kill(mail_queue.top(), SIGUSR1);
+    mail_queue.pop();
+    if (!strcmp(type, "mail")){
+        if (execl("./MetalDetector", "MetalDetector", "mail", rolling_gate_man_s, (char *)NULL) == -1){
+            perror("Error in execlp the mail people");
+            exit(-2);
+        }
+    }
+}
+
+void handle_sigusr2(int sig){
+    char rolling_gate_woman_s[10];
+    sprintf(rolling_gate_woman_s, "%d", rolling_gate_woman);
+    kill(female_queue.top(), SIGUSR2);
+    female_queue.pop();
+    if (!strcmp(type, "mail")){
+        if (execl("./MetalDetector", "MetalDetector", "female", rolling_gate_woman_s,(char *)NULL) == -1){
+            perror("Error in execlp the female people");
+            exit(-2);
+        }
+    }
 }
