@@ -35,20 +35,6 @@ int main(int argc, char *argv[]) {
         female_queue.push(getpid());
     }
     while (1);
-//    if (!strcmp(type, "mail")){
-//        if (execl("./MetalDetector", "MetalDetector", "mail", (char *)NULL) == -1){
-//            perror("Error in execlp the mail people");
-//            exit(-2);
-//        }
-//    } else if (!strcmp(type, "female")){
-//        if (execl("./MetalDetector", "MetalDetector", "female", (char *)NULL) == -1){
-//            perror("Error in execlp the female people");
-//            exit(-2);
-//        }
-//    } else {
-//        cout << "invalid gender" << endl;
-//        exit(-3);
-//    }
     return 0;
 }
 
@@ -64,12 +50,10 @@ int generate_waiting_time(int lower, int upper){
 }
 
 void handle_sigusr1(int sig){
-    char rolling_gate_man_s[10];
-    sprintf(rolling_gate_man_s, "%d", rolling_gate_man);
     kill(mail_queue.top(), SIGUSR1);
-    mail_queue.pop();
-    if (!strcmp(type, "mail")){
-        if (execl("./MetalDetector", "MetalDetector", "mail", rolling_gate_man_s, (char *)NULL) == -1){
+    if (!strcmp(type, "mail") && !mail_queue.empty()){
+        mail_queue.pop();
+        if (execl("./MetalDetector", "MetalDetector", "mail", (char *)NULL) == -1){
             perror("Error in execlp the mail people");
             exit(-2);
         }
@@ -77,12 +61,10 @@ void handle_sigusr1(int sig){
 }
 
 void handle_sigusr2(int sig){
-    char rolling_gate_woman_s[10];
-    sprintf(rolling_gate_woman_s, "%d", rolling_gate_woman);
     kill(female_queue.top(), SIGUSR2);
-    female_queue.pop();
-    if (!strcmp(type, "mail")){
-        if (execl("./MetalDetector", "MetalDetector", "female", rolling_gate_woman_s,(char *)NULL) == -1){
+    if (!strcmp(type, "female") && !female_queue.empty()){
+        female_queue.pop();
+        if (execl("./MetalDetector", "MetalDetector", "female", (char *)NULL) == -1){
             perror("Error in execlp the female people");
             exit(-2);
         }

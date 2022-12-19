@@ -2,7 +2,7 @@
 
 int main(int argc, char *argv[]) {
     int status = 0;
-    pid_t pid, wpid, rolling_gate_man, rolling_gate_woman;
+    pid_t pid, wpid, rolling_gate_man, rolling_gate_woman, metal_gate_man, metal_gate_woman;
     vector<pid_t> pid_array;
     unordered_map<string, int> data;
     // read file
@@ -54,7 +54,30 @@ int main(int argc, char *argv[]) {
             }
         }
     }
-
+    //generate the metal gate man and woman
+    for (int i = 0; i < 2; ++i) {
+        pid = fork();
+        if (pid == -1 ){
+            perror("Error in fork the metal gate man and woman");
+            exit(-1);
+        } else if (pid == 0 && i == 0) {
+            metal_gate_man = getpid();
+            char rolling_gate_man_s[10];
+            sprintf(rolling_gate_man_s, "%d", rolling_gate_man);
+            if (execl("./MetalDetector", "MetalDetector", "metal_gate_man", rolling_gate_man_s,(char *)NULL) == -1) {
+                perror("Error in execlp the rolling gate man");
+                exit(-2);
+            }
+        } else if (pid == 0 && i == 1){
+            metal_gate_woman = getpid();
+            char rolling_gate_woman_s[10];
+            sprintf(rolling_gate_woman_s, "%d", rolling_gate_woman);
+            if (execl("./MetalDetector", "MetalDetector", "metal_gate_woman", rolling_gate_woman_s, (char *)NULL) == -1) {
+                perror("Error in execlp the rolling gate woman");
+                exit(-2);
+            }
+        }
+    }
     //generate the mail people
     for (int i = 0; i < data["Male"]; ++i) {
         pid = fork();

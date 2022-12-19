@@ -3,7 +3,7 @@
 const char *type;
 priority_queue<pid_t> mail_queue;
 priority_queue<pid_t> female_queue;
-
+int metal_gate_man,metal_gate_woman, rolling_gate_man, rolling_gate_woman;
 int generate_waiting_time(int lower, int upper);
 
 int main(int argc, char *argv[]) {
@@ -26,19 +26,39 @@ int main(int argc, char *argv[]) {
     }
     // end reading
     type = argv[1];
-    if (!strcmp(argv[1], "mail")){
-        if (mail_queue.size() > data["queues_mail"]){
-
-        } else {
-
+    if (!strcmp(argv[1], "metal_gate_man")){
+        metal_gate_man = getpid();
+        rolling_gate_man = stoi(argv[2]);
+    } else if (!strcmp(argv[1], "metal_gate_woman")){
+        metal_gate_woman = getpid();
+        rolling_gate_woman = stoi(argv[2]);
+    }
+    while (1){
+        if (!strcmp(argv[1], "female")){
+            female_queue.push(getpid());
+            // added 2 because the female spending time more than mail
+            int wait = generate_waiting_time(1, 5) + 2;
+            sleep(wait);
+            cout << "process with id : " << getpid() << " spending " << wait << " second the gender is "<< argv[1] << endl;
+            female_queue.pop();
+            break;
         }
-    } else if (!strcmp(argv[1], "female")){
-        if (female_queue.size() > data["queues_mail"]){
-
-        } else {
-
+        if (!strcmp(argv[1], "mail")){
+            mail_queue.push(getpid());
+            int wait = generate_waiting_time(1, 5);
+            sleep(wait);
+            cout << "process with id : " << getpid() << " spending " << wait << " second the gender is "<< argv[1] << endl;
+            female_queue.pop();
+            break;
+        }
+        if (!strcmp(argv[1], "metal_gate_man") && mail_queue.size() <= 2){
+            kill(rolling_gate_man, SIGUSR1);
+        }
+        if (!strcmp(argv[1], "metal_gate_woman") && mail_queue.size() <= 2){
+            kill(rolling_gate_woman, SIGUSR2);
         }
     }
+
 
     return 0;
 }
