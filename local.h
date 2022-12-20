@@ -19,4 +19,7 @@ using namespace std;
 #define RED     "\033[31m"      /* Red */
 #define GREEN   "\033[32m"      /* Green */
 #define BLUE    "\033[34m"      /* Blue */
+#define YELLOW  "\033[33m"      /* Yellow */
+#define BLACK   "\033[30m"      /* Black */
+#define MAGENTA "\033[35m"      /* Magenta */
 #endif //SECUNDPROJECT_LOCAL_H
