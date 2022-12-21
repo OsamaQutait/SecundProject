@@ -36,10 +36,11 @@ int main(int argc, char *argv[]) {
         rolling_gate_woman = stoi(argv[2]);
         cout << GREEN << "rolling_gate_woman id is : " << argv[2] << endl;
         fflush(stdout);
-    } else {
-        cout << RED<< "person with id : " << getpid() <<
-             " reach the metal detector gate with gender " << argv[1] << endl;
     }
+//    else {
+//        cout << YELLOW << "person with id : " << getpid() <<
+//             " reach the metal detector gate with gender " << argv[1] << endl;
+//    }
 //    while (1){
 //        if (!strcmp(argv[1], "female")){
 //            female_queue.push(getpid());

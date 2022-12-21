@@ -62,6 +62,7 @@ int main(int argc, char *argv[]) {
 
         }
     }
+    sleep(1);
     //generate the metal gate man and woman
     for (int i = 0; i < 2; ++i) {
         pid = fork();
@@ -93,6 +94,7 @@ int main(int argc, char *argv[]) {
             }
         }
     }
+    sleep(1);
     //generate the mail people
     for (int i = 0; i < data["Male"]; ++i) {
         pid = fork();
@@ -105,6 +107,7 @@ int main(int argc, char *argv[]) {
                 exit(-2);
             }
         } else {
+//            sleep(1);
             pid_array.push_back(pid);
         }
     }
@@ -120,6 +123,7 @@ int main(int argc, char *argv[]) {
                 exit(-2);
             }
         } else {
+//            sleep(1);
             pid_array.push_back(pid);
         }
     }
