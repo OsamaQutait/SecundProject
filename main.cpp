@@ -129,6 +129,14 @@ int main(int argc, char *argv[]) {
     }
     //the father waits for all the child processes
     while ((wpid = wait(&status)) > 0);
+    int woman_sem = (semget(ftok(".", 'B'), 1, 0));
+    if (semctl(woman_sem, 0, IPC_RMID, 0) == -1){
+        perror("IPC_RMID faild");
+    }
+    int man_sem = (semget(ftok(".", 'A'), 1, 0));
+    if (semctl(man_sem, 0, IPC_RMID, 0) == -1){
+        cout << "man_sem " << man_sem << " mail_counter" << endl;
+        perror("IPC_RMID faild");
+    }
     return 0;
 }
-
