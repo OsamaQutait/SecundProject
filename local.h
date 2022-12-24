@@ -26,7 +26,19 @@ using namespace std;
 #include <sys/ipc.h>
 #include <sys/msg.h>
 #include <signal.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
+#include <GL/glut.h>
 #include <unistd.h>
+#include <sys/wait.h>
+#include <vector>
+#include <stdio.h>
+#include <string.h>
+#include <unordered_map>
+#define RED     "\033[31m"      /* Red */
+#define GREEN   "\033[32m"      /* Green */
+#define BLUE    "\033[34m"      /* Blue */
+
 #define RED     "\033[31m"      /* Red */
 #define GREEN   "\033[32m"      /* Green */
 #define BLUE    "\033[34m"      /* Blue */
