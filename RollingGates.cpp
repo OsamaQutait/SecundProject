@@ -4,15 +4,19 @@ pid_t rolling_gate_man, rolling_gate_woman;
 const char *type;
 priority_queue<pid_t> mail_queue;
 priority_queue<pid_t> female_queue;
-bool flag1 = true;
 int generate_waiting_time(int lower, int upper);
 void handle_sigusr1(int sig);
 void handle_sigusr2(int sig);
+void handle_sigusr3(int sig);
+void handle_sigusr4(int sig);
+const char * rolling_gate_man_id;
+const char* rolling_gate_woman_id;
 struct message_buffer{
     pid_t pid;
 };
 int man_sem, woman_sem;
 int man_msd_id, woman_msg_id;
+
 int main(int argc, char *argv[]) {
 
 // read file
@@ -34,8 +38,6 @@ int main(int argc, char *argv[]) {
     }
     // end reading
 
-    key_t ipc_key1, ipc_key2;
-    key_t key_id1, key_id2;
     union semun arg;
     static ushort   start_val[1] = {1};
     static struct sembuf acquire = {0, -1, SEM_UNDO},
@@ -51,7 +53,6 @@ int main(int argc, char *argv[]) {
             perror("semget osama");
             exit(-4);
         }
-        cout << "man sem id is : " << man_sem <<  endl;
         arg.array = start_val;
         if ( semctl(man_sem, 0, SETALL, arg) == -1 ) {
             perror("semctl initialization");
@@ -76,17 +77,13 @@ int main(int argc, char *argv[]) {
                 break;
             }
         }
-        while (!mail_queue.empty()){
-            cout << RED << mail_queue.top() << " gender is mail " << endl;
-            fflush(stdout);
-            mail_queue.pop();
-        }
+        signal(SIGUSR1, &handle_sigusr1);
+        while (1);
 
-//        signal(SIGUSR1, &handle_sigusr1);
-//        while (1);
     }
 
     if (!strcmp(type, "rolling_gate_woman")){
+        sleep(1);
         rolling_gate_woman = getpid();
         cout << BLUE << "rolling_gate_woman id is : " << rolling_gate_woman << endl;
         // semaphore
@@ -95,13 +92,12 @@ int main(int argc, char *argv[]) {
             perror("semget");
             exit(-4);
         }
-        cout << "woman sem id is : " << woman_sem << endl;
+
         arg.array = start_val;
         if ( semctl(woman_sem, 0, SETALL, arg) == -1 ) {
             perror("semctl initialization");
             exit(-1);
         }
-
         // message queue
         woman_msg_id = msgget(ftok(".", 'P'), 0666|IPC_CREAT);
         if (woman_msg_id == -1){
@@ -109,9 +105,9 @@ int main(int argc, char *argv[]) {
             exit(-1);
         }
         while (1){
-            struct message_buffer message;
-            int receiv_val = msgrcv(woman_msg_id, &message, sizeof(message.pid), 0, !IPC_NOWAIT);
-            female_queue.push(message.pid);
+            struct message_buffer message2;
+            int receiv_val = msgrcv(woman_msg_id, &message2, sizeof(message2.pid), 0, !IPC_NOWAIT);
+            female_queue.push(message2.pid);
             if (female_queue.size() == data["Female"]){
                 msgctl(woman_msg_id, IPC_RMID, NULL);
                 break;
@@ -121,21 +117,15 @@ int main(int argc, char *argv[]) {
                 break;
             }
         }
-        while (!female_queue.empty()){
-            cout << YELLOW << female_queue.top() << " gender is female " << endl;
-            fflush(stdout);
-            female_queue.pop();
-        }
+
+
+        signal(SIGUSR2, &handle_sigusr3);
+        while (1);
     }
 
-//    if (!strcmp(type, "female") || !strcmp(type, "mail")){
-//        wait = generate_waiting_time(1, 10);
-//        //his/her waiting time is grater pass at first to the queue
-//        sleep(11-wait);
-//    }
-
     if (!strcmp(type, "mail")){
-        wait = 2;
+        rolling_gate_man_id = argv[2];
+//        wait = 2;
         // connect to semaphore
         man_sem = (semget(ftok(".", 'A'), 1, 0));
         if (man_sem == -1){
@@ -146,16 +136,7 @@ int main(int argc, char *argv[]) {
             perror("semop1");
             exit(3);
         }
-//        cout << RED << "person with id : " << getpid() <<
-//             " reach the rolling gate with gender " << argv[1] << " with waiting time :"
-//             << wait  << " second" << endl;
-//        fflush(stdout);
-//        sleep(1);
-//
-//        if (execl("./MetalDetector", "MetalDetector", "mail", (char *)NULL) == -1){
-//            perror("Error in execlp the mail people");
-//            exit(-2);
-//        }
+
         // send a message
         int msg_id = msgget(ftok(".", 'S'), 0666|IPC_CREAT);
         if (msg_id == -1){
@@ -173,9 +154,11 @@ int main(int argc, char *argv[]) {
             perror("semop2");
             exit(3);
         }
+        signal(SIGUSR1, &handle_sigusr2);
+        pause();
 
     } else if (!strcmp(type, "female")){
-        wait = 2;
+        rolling_gate_woman_id = argv[2];
         //semaphore
         woman_sem = (semget(ftok(".", 'B'), 1, 0));
         if (woman_sem == -1){
@@ -186,15 +169,6 @@ int main(int argc, char *argv[]) {
             perror("semop3");
             exit(3);
         }
-//        cout << YELLOW << "person with id : " << getpid() <<
-//             " reach the rolling gate with gender " << argv[1] << " with waiting time :"
-//             << wait  << " second" << endl;
-//        fflush(stdout);
-//        sleep(1);
-//        if (execl("./MetalDetector", "MetalDetector", "female", (char *)NULL) == -1){
-//            perror("Error in execlp the female people");
-//            exit(-2);
-//        }
         // send message
         int msg_id1 = msgget(ftok(".", 'P'), 0666|IPC_CREAT);
         if (msg_id1 == -1){
@@ -213,6 +187,8 @@ int main(int argc, char *argv[]) {
             perror("semop4");
             exit(3);
         }
+        signal(SIGUSR2, &handle_sigusr4);
+        pause();
     }
     return 0;
 }
@@ -229,9 +205,34 @@ int generate_waiting_time(int lower, int upper){
 }
 
 void handle_sigusr1(int sig){
+    if (mail_queue.empty()){
+        kill(rolling_gate_man, SIGINT);
+    } else {
+        kill(mail_queue.top(), SIGUSR1);
+        mail_queue.pop();
+    }
 
 }
 
 void handle_sigusr2(int sig){
+    if (execl("./MetalDetector", "MetalDetector", "mail", rolling_gate_man_id, (char *)NULL) == -1){
+        perror("Error in execlp the mail people");
+        exit(-2);
+    }
+}
 
+void handle_sigusr3(int sig){
+    if (female_queue.empty()){
+        kill(rolling_gate_woman, SIGINT);
+    }else {
+        kill(female_queue.top(), SIGUSR2);
+        female_queue.pop();
+    }
+}
+
+void handle_sigusr4(int sig){
+    if (execl("./MetalDetector", "MetalDetector", "female", rolling_gate_woman_id, (char *)NULL) == -1){
+        perror("Error in execlp the female people");
+        exit(-2);
+    }
 }

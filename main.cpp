@@ -102,7 +102,10 @@ int main(int argc, char *argv[]) {
             perror("Error in for the mail people");
             exit(-1);
         } else if (pid == 0){
-            if (execl("./RollingGates", "RollingGates", "mail", (char *)NULL) == -1){
+            string ss = to_string(int(rolling_gate_man));
+            char rolling_gate_man_s[ss.length()+1];
+            strcpy(rolling_gate_man_s, ss.c_str());
+            if (execl("./RollingGates", "RollingGates", "mail", rolling_gate_man_s, (char *)NULL) == -1){
                 perror("Error in execlp the mail people");
                 exit(-2);
             }
@@ -118,7 +121,10 @@ int main(int argc, char *argv[]) {
             perror("Error in for the Female people");
             exit(-1);
         } else if (pid == 0){
-            if (execl("./RollingGates", "RollingGates", "female", (char *)NULL) == -1){
+            string ss = to_string(int(rolling_gate_woman));
+            char rolling_gate_woman_s[ss.length()+1];
+            strcpy(rolling_gate_woman_s, ss.c_str());
+            if (execl("./RollingGates", "RollingGates", "female", rolling_gate_woman_s,  (char *)NULL) == -1){
                 perror("Error in execlp the female people");
                 exit(-2);
             }
