@@ -1,12 +1,10 @@
 #include "local.h"
-void handle_sigusr1(int sig);
 
 const char *type;
 priority_queue<pid_t> mail_queue;
 priority_queue<pid_t> female_queue;
 int metal_gate_man,metal_gate_woman, rolling_gate_man, rolling_gate_woman;
 int generate_waiting_time(int lower, int upper);
-int male_queue_counter = 0, female_queue_counter = 0;
 
 int main(int argc, char *argv[]) {
     unordered_map<string, int> data;
@@ -37,7 +35,7 @@ int main(int argc, char *argv[]) {
         fflush(stdout);
 
         for (int i = 0; i < data["queues_mail"]; ++i) {
-            sleep(1);
+            sleep(2);
             kill(rolling_gate_man, SIGUSR1);
         }
 
@@ -49,22 +47,30 @@ int main(int argc, char *argv[]) {
         fflush(stdout);
 
         for (int j = 0; j < data["queues_female"]; ++j) {
-            sleep(1);
+            sleep(2);
             kill(rolling_gate_woman, SIGUSR2);
         }
 
     } else if (!strcmp(argv[1], "mail")){
         int wait = generate_waiting_time(1, 3);
-        cout << GREEN << "process with id : " << getpid() << " reach the metal detector with gender " << argv[1] << " with waiting time " << wait << endl;
-        fflush(stdout);
         sleep(2);
+//        cout << GREEN << "process with id : " << getpid() << " reach the metal detector with gender " << argv[1] << " with waiting time " << wait << endl;
+//        fflush(stdout);
         kill(stoi(argv[2]), SIGUSR1);
+        if (execl("./hall", "hall", "male", (char *)NULL) == -1){
+            perror("Error in execlp the male people");
+            exit(-2);
+        }
     } else if (!strcmp(argv[1], "female")){
         int wait = generate_waiting_time(1, 5);
-        cout << RED << "process with id : " << getpid() << " reach the metal detector with gender " << argv[1] << " with waiting time " << wait << endl;
-        fflush(stdout);
         sleep(2);
+//        cout << RED << "process with id : " << getpid() << " reach the metal detector with gender " << argv[1] << " with waiting time " << wait << endl;
+//        fflush(stdout);
         kill(stoi(argv[2]), SIGUSR2);
+        if (execl("./hall", "hall", "female", (char *)NULL) == -1){
+            perror("Error in execlp the female people");
+            exit(-2);
+        }
     }
 
     return 0;
@@ -79,8 +85,4 @@ int generate_waiting_time(int lower, int upper){
     srand(s);
     int num = (rand() % (upper - lower + 1)) + lower;
     return num;
-}
-
-void handle_sigusr1(int sig){
-
 }

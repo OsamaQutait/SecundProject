@@ -1,5 +1,5 @@
 #include "local.h"
-pid_t pid, wpid, rolling_gate_man, rolling_gate_woman, metal_gate_man, metal_gate_woman;
+pid_t pid, wpid, rolling_gate_man, rolling_gate_woman, metal_gate_man, metal_gate_woman, hall_process;
 
 int main(int argc, char *argv[]) {
     int status = 0;
@@ -34,6 +34,21 @@ int main(int argc, char *argv[]) {
     sprintf(unserved, "%d", data["Unserved"]);
     sprintf(unhappy, "%d", data["Unhappy"]);
     sprintf(satisfied, "%d", data["Satisfied"]);
+
+    // generate process for the hall
+    pid = fork();
+    if (pid == -1){
+        perror("Error in for the hall");
+        exit(-1);
+    } else if (pid == 0){
+        if (execl("./hall", "hall", "hall_process", (char *)NULL) == -1){
+            perror("Error in execlp the mail people");
+            exit(-2);
+        }
+    } else {
+        hall_process = pid;
+        pid_array.push_back(pid);
+    }
     //generate the rolling gate man and woman
     for (int i = 0; i < 2; ++i) {
         pid = fork();
@@ -142,6 +157,11 @@ int main(int argc, char *argv[]) {
     int man_sem = (semget(ftok(".", 'A'), 1, 0));
     if (semctl(man_sem, 0, IPC_RMID, 0) == -1){
         cout << "man_sem " << man_sem << " mail_counter" << endl;
+        perror("IPC_RMID faild");
+    }
+    int hall_sem = (semget(ftok(".", 'h'), 1, 0));
+    if (semctl(hall_sem, 0, IPC_RMID, 0) == -1){
+        cout << "man_sem " << hall_sem << " mail_counter" << endl;
         perror("IPC_RMID faild");
     }
     return 0;
