@@ -4,7 +4,7 @@ pid_t pid, wpid, rolling_gate_man, rolling_gate_woman, metal_gate_man, metal_gat
 vector<pid_t> pid_array;
 void handle_sigusr1(int sig);
 
-int main(int argc, char *argv[]) {x
+int main(int argc, char *argv[]) {
 
     signal(SIGUSR1, &handle_sigusr1);
     int status = 0;
@@ -28,18 +28,6 @@ int main(int argc, char *argv[]) {x
     data["Male"] = (int)((double)data["total_number_of_people"]*((double)data["Male"]/(double)100));
     data["Female"] = (int)((double)data["total_number_of_people"]*((double)data["Female"]/(double)100));
     // end reading
-    char mail[3], femail[3], bx[3], ix[3], tx[3],
-         rx[3], unserved[3], unhappy[3], satisfied[3];
-
-    sprintf(mail, "%d", data["Male"]);
-    sprintf(femail, "%d", data["Female"]);
-    sprintf(bx, "%d", data["Bx"]);
-    sprintf(ix, "%d", data["Ix"]);
-    sprintf(tx, "%d", data["Tx"]);
-    sprintf(rx, "%d", data["Rx"]);
-    sprintf(unserved, "%d", data["Unserved"]);
-    sprintf(unhappy, "%d", data["Unhappy"]);
-    sprintf(satisfied, "%d", data["Satisfied"]);
 
     // generate process for the ui
     pid = fork();
@@ -88,14 +76,11 @@ int main(int argc, char *argv[]) {x
         } else if (pid != 0 && i == 0){
             rolling_gate_man = pid;
             pid_array.push_back(pid);
-            cout << MAGENTA << "rolling_gate_man ID is : " << rolling_gate_man << endl;
             fflush(stdout);
 
         } else if (pid != 0 && i == 1){
             rolling_gate_woman = pid;
             pid_array.push_back(pid);
-            cout << MAGENTA << "rolling_gate_woman ID is : " << rolling_gate_woman << endl;
-            fflush(stdout);
 
         }
     }
@@ -109,8 +94,6 @@ int main(int argc, char *argv[]) {x
         } else if (pid == 0 && i == 0) {
             metal_gate_man = getpid();
             pid_array.push_back(pid);
-            cout << MAGENTA << "metal_gate_man ID is : " << metal_gate_man << endl;
-            fflush(stdout);
             string ss = to_string(int(rolling_gate_man));
             char rolling_gate_man_s[ss.length()+1];
             strcpy(rolling_gate_man_s, ss.c_str());
@@ -122,8 +105,6 @@ int main(int argc, char *argv[]) {x
         } else if (pid == 0 && i == 1){
             metal_gate_woman = getpid();
             pid_array.push_back(pid);
-            cout << MAGENTA << "metal_gate_woman ID is : " << metal_gate_woman << endl;
-            fflush(stdout);
             string ss = to_string(int(rolling_gate_woman));
             char rolling_gate_woman_s[ss.length()+1];
             strcpy(rolling_gate_woman_s, ss.c_str());
@@ -166,7 +147,6 @@ int main(int argc, char *argv[]) {x
                 exit(-2);
             }
         } else {
-//            sleep(1);
             pid_array.push_back(pid);
         }
     }

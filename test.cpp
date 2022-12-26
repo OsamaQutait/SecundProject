@@ -2,9 +2,9 @@
 // Created by osama on 12/26/22.
 //
 #include "local.h"
+unordered_map <string, int> data;
 
 int main(){
-    unordered_map<string, int> data;
     // read file
     string line, word, num;
     fstream data_file;

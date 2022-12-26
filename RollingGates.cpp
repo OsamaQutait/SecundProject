@@ -50,7 +50,6 @@ int main(int argc, char *argv[]) {
     int wait;
     if (!strcmp(argv[1], "rolling_gate_man")){
         rolling_gate_man = getpid();
-        cout << BLUE << "rolling_gate_man id is : " << rolling_gate_man << endl;
         // semaphore
         man_sem = (semget(ftok(".", 'A'), 1, IPC_CREAT | IPC_EXCL | 0660));
         if (man_sem == -1){
@@ -85,13 +84,11 @@ int main(int argc, char *argv[]) {
         while (1){
             pause();
         }
-
     }
 
     if (!strcmp(type, "rolling_gate_woman")){
         sleep(1);
         rolling_gate_woman = getpid();
-        cout << BLUE << "rolling_gate_woman id is : " << rolling_gate_woman << endl;
         // semaphore
         woman_sem = semget(ftok(".", 'B'), 1, IPC_CREAT | IPC_EXCL | 0660);
         if (woman_sem == -1){
@@ -132,14 +129,12 @@ int main(int argc, char *argv[]) {
 
     if (!strcmp(type, "mail")){
         rolling_gate_man_id = argv[2];
-//        wait = 2;
         // connect to semaphore
         man_sem = (semget(ftok(".", 'A'), 1, 0));
         if (man_sem == -1){
             perror("semget mail");
             exit(-2);
         }
-//        sleep(generate_waiting_time(1, 3));
         if ( semop(man_sem, &acquire, 1) == -1 ) {
             perror("semop1");
             exit(3);
@@ -173,10 +168,9 @@ int main(int argc, char *argv[]) {
             perror("semget female");
             exit(-2);
         }
-//        sleep(generate_waiting_time(1, 3));
         if ( semop(woman_sem, &acquire, 1) == -1 ) {
             perror("semop3");
-            exit(3);
+            exit(-3);
         }
         // send message
         int msg_id1 = msgget(ftok(".", 'P'), 0666|IPC_CREAT);

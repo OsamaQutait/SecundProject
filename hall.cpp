@@ -92,7 +92,7 @@ int main(int argc, char *argv[]) {
          * if type_num = 2 ---> Tx
          * if type_num = 3 ---> Rx
          */
-        //if (state_num != 0){
+
             // hall semaphore
             int sem = (semget(ftok(".", 'h'), 1, 0));
             if (sem == -1){
@@ -121,13 +121,18 @@ int main(int argc, char *argv[]) {
                 shm[2]++;
             }
 
-            cout << YELLOW << "process with id " << getpid() << " in the critical system, with gender " << argv[1] << " with service type "
+            cout << YELLOW << "process with id " << getpid() << " in the critical section, with gender " << argv[1] << " with service type "
             << service_type[service_num]  << " his states is " << state_type[state_num] << endl
                     << "Unserved " << shm[0] << " Unhappy " << shm[1] << " Satisfied " << shm[2] << endl;
             fflush(stdout);
 
             if (shm[0] == data["Unserved"] || shm[1] == data["Unhappy"] || shm[2] == data["Satisfied"]){
-                cout << "stop " << endl;
+                cout << "one of the condition happen so the program will terminate " << endl;
+                kill(getppid(), SIGUSR1);
+
+            }
+
+            if (shm[0] + shm[1] + shm[2] == data["total_number_of_people"]){
                 kill(getppid(), SIGUSR1);
 
             }
@@ -142,15 +147,7 @@ int main(int argc, char *argv[]) {
                 perror("error in release the hall semaphore");
                 exit(-1);
             }
-       // } else {
-//            if (state_type[state_num] == "Unserved"){
-//                shm[0]++;
-//            }
-//            cout << "Unserved " << shm[0] << " Unhappy " << shm[1] << " Satisfied " << shm[2] << endl;
-//            cout << GREEN << "process with id " << getpid() << " in the critical system, with gender " << argv[1] << " with service type "
-//                             << service_type[service_num]  << " his states is " << state_type[state_num] << endl;
-//            fflush(stdout);
-       // }
+
     }
 
     return 0;
