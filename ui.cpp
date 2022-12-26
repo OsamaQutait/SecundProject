@@ -13,11 +13,9 @@ void renderBitMap(char *string, void *font, float x, float y) {
     }
 }
 
-void display() {
 
-
+void draw() {
     glClear(GL_COLOR_BUFFER_BIT);
-
 
     ///BORDER
 
@@ -203,6 +201,27 @@ void display() {
     glFlush();
 ////////////////
 
+    // read file
+    unordered_map<string, int> data;
+    string line, word, num;
+    fstream data_file;
+    data_file.open("inputData.txt", ios::in);
+    if (!data_file){
+        perror("File not created!");
+        exit(-1);
+    } else {
+        while (getline(data_file, line)){
+            stringstream ss(line);
+            ss >> word;
+            ss >> num;
+            data[word] = stoi(num); // casting to integer
+        }
+        data_file.close();
+    }
+    data["Male"] = (int)((double)data["total_number_of_people"]*((double)data["Male"]/(double)100));
+    data["Female"] = (int)((double)data["total_number_of_people"]*((double)data["Female"]/(double)100));
+
+    // end reading
 
     ///texts
     glColor3f(1, 1, 1);
@@ -213,24 +232,17 @@ void display() {
 
     char PeopleStringNum[256];
 
-    char SatisfiedStringNum[256];
-    char UnsatisfiedStringNum[256];
-    char UnPatientStringNum[256];
-
-    int FemaleNumber = 5;
-    int MaleNumber = 10;
-
-    int PeopleNum = 100;
-
-    int SatisfiedNum = 10;
-    int UnsatisfiedNum = 10;
-    int UnPatientNum = 10;
-
-//    int PeopleInHallNum = 50;
 
 
-    sprintf(title, "WELCOME TO OUR PROGRAM");
-    renderBitMap(title, GLUT_BITMAP_HELVETICA_18, 530, 672);
+    int FemaleNumber = data["Female"];
+    int MaleNumber = data["Male"];
+
+    int PeopleNum = data["total_number_of_people"];
+
+
+
+    sprintf(title, "OIM Simulation");
+    renderBitMap(title, GLUT_BITMAP_HELVETICA_18, 700, 672);
     sprintf(FemaleStringNum, "Female Number: %d", FemaleNumber);
     renderBitMap(FemaleStringNum, GLUT_BITMAP_HELVETICA_18, 320, 440);
     sprintf(MaleStringNum, "Male Number: %d", MaleNumber);
@@ -252,14 +264,6 @@ void display() {
     renderBitMap(title, GLUT_BITMAP_HELVETICA_18, 1200, 610);
 ///////////////////
 
-    sprintf(SatisfiedStringNum, "Satisfied People: %d", SatisfiedNum);
-    renderBitMap(SatisfiedStringNum, GLUT_BITMAP_HELVETICA_18, 1150, 410);
-
-    sprintf(UnsatisfiedStringNum, "UnSatisfied People: %d", UnsatisfiedNum);
-    renderBitMap(UnsatisfiedStringNum, GLUT_BITMAP_HELVETICA_18, 1150, 380);
-
-    sprintf(UnPatientStringNum, "UnPatient People: %d", UnPatientNum);
-    renderBitMap(UnPatientStringNum, GLUT_BITMAP_HELVETICA_18, 1150, 350);
 
 
     ///////////////////
@@ -299,12 +303,8 @@ void display() {
 
 
     glBegin(GL_POLYGON);
-    if (UnPatientNum == 10) {
-        glColor3f(0, 1, 0);
 
-    } else {
-        glColor3f(1, 1, 0);
-    }
+    glColor3f(1, 1, 0);
     glVertex2f(625, 580);
     glVertex2f(625 + 40, 580);
     glVertex2f(625 + 40, 540);
@@ -413,14 +413,55 @@ void display() {
 
 }
 
+void sim() {
+    int shmID = shmget(ftok(".", 'o') , sizeof(int)*3, 0666 | IPC_CREAT);
+    if (shmID == -1){
+        perror("error in generate the shared memory");
+        exit(-1);
+    }
+    int *shm = (int *)shmat(shmID, NULL, 0);
+
+    char UnservedStringNum[256];
+    char UnhappyStringNum[256];
+    char satisfiedStringNum[256];
+
+    int unservednum = shm[0];
+    int Unhappynum = shm[1];
+    int satisfiedNum = shm[2];
+
+    sprintf(UnservedStringNum, "Unserved People: %d", unservednum);
+    renderBitMap(UnservedStringNum, GLUT_BITMAP_HELVETICA_18, 1150, 410);
+
+
+    sprintf(UnhappyStringNum, "Unhappy People: %d", Unhappynum);
+    renderBitMap(UnhappyStringNum, GLUT_BITMAP_HELVETICA_18, 1150, 380);
+
+    sprintf(satisfiedStringNum, "Satisfied People: %d", satisfiedNum);
+    renderBitMap(satisfiedStringNum, GLUT_BITMAP_HELVETICA_18, 1150, 350);
+    glEnd();
+    glFlush();
+
+}
+
+
+
+void display() {
+    draw();
+    while(1) {
+        sim();
+        sleep(1);
+        glClear(GL_COLOR_BUFFER_BIT);
+        draw();
+
+    }
+}
 int main(int argc, char **argv) {
 
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
     glutInitWindowPosition(150, 250);
     glutInitWindowSize(1400, 700);
-    glutCreateWindow("A Simple Triangle");
+    glutCreateWindow("WELCOME TO OUR PROGRAM");
     glutDisplayFunc(display);
     glutMainLoop();
 }
-
