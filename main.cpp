@@ -116,7 +116,7 @@ int main(int argc, char *argv[]) {
             }
         }
     }
-    sleep(1);
+//    sleep(1);
     //generate the mail people
     for (int i = 0; i < data["Male"]; ++i) {
         pid = fork();
