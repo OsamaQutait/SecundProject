@@ -34,10 +34,12 @@ int main(int argc, char *argv[]) {
         cout << GREEN << "rolling_gate_man id is : " << argv[2] << endl;
         fflush(stdout);
 
-        for (int i = 0; i < data["queues_mail"]; ++i) {
-            sleep(2);
-            kill(rolling_gate_man, SIGUSR1);
-        }
+//        for (int i = 0; i < data["queues_mail"]; ++i) {
+//            sleep(2);
+//            kill(rolling_gate_man, SIGUSR1);
+//        }
+        kill(rolling_gate_man, SIGUSR1);
+
 
     } else if (!strcmp(argv[1], "metal_gate_woman")){
         sleep(1);
@@ -46,10 +48,12 @@ int main(int argc, char *argv[]) {
         cout << GREEN << "rolling_gate_woman id is : " << rolling_gate_woman << endl;
         fflush(stdout);
 
-        for (int j = 0; j < data["queues_female"]; ++j) {
-            sleep(2);
-            kill(rolling_gate_woman, SIGUSR2);
-        }
+//        for (int j = 0; j < data["queues_female"]; ++j) {
+//            sleep(2);
+//            kill(rolling_gate_woman, SIGUSR2);
+//        }
+        kill(rolling_gate_woman, SIGUSR2);
+
 
     } else if (!strcmp(argv[1], "mail")){
         int wait = generate_waiting_time(1, 3);
@@ -63,7 +67,7 @@ int main(int argc, char *argv[]) {
         }
     } else if (!strcmp(argv[1], "female")){
         int wait = generate_waiting_time(1, 5);
-        sleep(2);
+        sleep(3);
 //        cout << RED << "process with id : " << getpid() << " reach the metal detector with gender " << argv[1] << " with waiting time " << wait << endl;
 //        fflush(stdout);
         kill(stoi(argv[2]), SIGUSR2);

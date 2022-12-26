@@ -19,6 +19,11 @@ int man_msd_id, woman_msg_id;
 
 int main(int argc, char *argv[]) {
 
+    union semun arg;
+    static ushort   start_val[1] = {1};
+    static struct sembuf acquire = {0, -1, SEM_UNDO},
+            release = {0, 1, SEM_UNDO};
+
 // read file
     unordered_map<string, int> data;
     string line, word, num;
@@ -38,10 +43,7 @@ int main(int argc, char *argv[]) {
     }
     // end reading
 
-    union semun arg;
-    static ushort   start_val[1] = {1};
-    static struct sembuf acquire = {0, -1, SEM_UNDO},
-                         release = {0, 1, SEM_UNDO};
+
     type = argv[1];
     int wait;
     if (!strcmp(argv[1], "rolling_gate_man")){
@@ -119,7 +121,6 @@ int main(int argc, char *argv[]) {
                 break;
             }
         }
-
 
         signal(SIGUSR2, &handle_sigusr3);
         while (1){
