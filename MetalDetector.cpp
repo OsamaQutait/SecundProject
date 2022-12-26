@@ -57,7 +57,7 @@ int main(int argc, char *argv[]) {
 
     } else if (!strcmp(argv[1], "mail")){
         int wait = generate_waiting_time(1, 3);
-        sleep(2);
+        sleep(wait);
 //        cout << GREEN << "process with id : " << getpid() << " reach the metal detector with gender " << argv[1] << " with waiting time " << wait << endl;
 //        fflush(stdout);
         kill(stoi(argv[2]), SIGUSR1);
@@ -67,7 +67,7 @@ int main(int argc, char *argv[]) {
         }
     } else if (!strcmp(argv[1], "female")){
         int wait = generate_waiting_time(1, 5);
-        sleep(3);
+        sleep(wait);
 //        cout << RED << "process with id : " << getpid() << " reach the metal detector with gender " << argv[1] << " with waiting time " << wait << endl;
 //        fflush(stdout);
         kill(stoi(argv[2]), SIGUSR2);
