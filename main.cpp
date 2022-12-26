@@ -38,6 +38,20 @@ int main(int argc, char *argv[]) {
     sprintf(unhappy, "%d", data["Unhappy"]);
     sprintf(satisfied, "%d", data["Satisfied"]);
 
+    // generate process for the ui
+    pid = fork();
+    if (pid == -1){
+        perror("Error in for the hall");
+        exit(-1);
+    } else if (pid == 0){
+        if (execl("./ui", "ui", (char *)NULL) == -1){
+            perror("Error in execlp the ui process");
+            exit(-2);
+        }
+    } else {
+        pid_array.push_back(pid);
+    }
+
     // generate process for the hall
     pid = fork();
     if (pid == -1){

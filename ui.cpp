@@ -1,3 +1,6 @@
+//// g++ test.cpp -o test.cpp -lglut -lGLU -lGL -lm
+
+
 #include "local.h"
 
 
@@ -210,33 +213,20 @@ void display() {
 
     char PeopleStringNum[256];
 
-    char TxPeopleStringNum[256];
-    char BxPeopleStringNum[256];
-    char IxPeopleStringNum[256];
-    char RxPeopleStringNum[256];
-
     char SatisfiedStringNum[256];
     char UnsatisfiedStringNum[256];
     char UnPatientStringNum[256];
-
-    char PeopleInHallStringNum[256];
 
     int FemaleNumber = 5;
     int MaleNumber = 10;
 
     int PeopleNum = 100;
 
-    int TxPeopleNum = 10;
-
-    int BxPeopleNum = 10;
-    int IxPeopleNum = 10;
-    int RxPeopleNum = 10;
-
     int SatisfiedNum = 10;
     int UnsatisfiedNum = 10;
     int UnPatientNum = 10;
 
-    int PeopleInHallNum = 50;
+//    int PeopleInHallNum = 50;
 
 
     sprintf(title, "WELCOME TO OUR PROGRAM");
@@ -249,17 +239,17 @@ void display() {
     sprintf(PeopleStringNum, "People waiting to enter: %d", PeopleNum);
     renderBitMap(PeopleStringNum, GLUT_BITMAP_HELVETICA_18, 60, 345);
 ////////////////////
-    sprintf(TxPeopleStringNum, "Tx People: %d", TxPeopleNum);
-    renderBitMap(TxPeopleStringNum, GLUT_BITMAP_HELVETICA_18, 630, 610);
+    sprintf(title, "travel document");
+    renderBitMap(title, GLUT_BITMAP_HELVETICA_18, 620, 610);
 
-    sprintf(BxPeopleStringNum, "Bx People: %d", BxPeopleNum);
-    renderBitMap(BxPeopleStringNum, GLUT_BITMAP_HELVETICA_18, 820, 610);
+    sprintf(title, "birth certificate");
+    renderBitMap(title, GLUT_BITMAP_HELVETICA_18, 810, 610);
 
-    sprintf(IxPeopleStringNum, "Ix People: %d", IxPeopleNum);
-    renderBitMap(IxPeopleStringNum, GLUT_BITMAP_HELVETICA_18, 1010, 610);
+    sprintf(title, "ID-related");
+    renderBitMap(title, GLUT_BITMAP_HELVETICA_18, 1020, 610);
 
-    sprintf(RxPeopleStringNum, "Rx People: %d", RxPeopleNum);
-    renderBitMap(RxPeopleStringNum, GLUT_BITMAP_HELVETICA_18, 1200, 610);
+    sprintf(title, "family reunion");
+    renderBitMap(title, GLUT_BITMAP_HELVETICA_18, 1200, 610);
 ///////////////////
 
     sprintf(SatisfiedStringNum, "Satisfied People: %d", SatisfiedNum);
@@ -271,8 +261,6 @@ void display() {
     sprintf(UnPatientStringNum, "UnPatient People: %d", UnPatientNum);
     renderBitMap(UnPatientStringNum, GLUT_BITMAP_HELVETICA_18, 1150, 350);
 
-    sprintf(PeopleInHallStringNum, "Total Number of People in the Hall: %d", PeopleInHallNum);
-    renderBitMap(PeopleInHallStringNum, GLUT_BITMAP_HELVETICA_18, 610, 50);
 
     ///////////////////
     glEnd();
@@ -297,6 +285,7 @@ void display() {
 
     /////LINES BETWEEN SHABABEEK/////
     for (int i = 600; i <= 1360; i += 190) {
+
         glBegin(GL_LINES);
         glColor3f(1, 1, 1);
         glVertex2f(i, 600);
@@ -305,9 +294,99 @@ void display() {
         glFlush();
     }
 
-    ////////////////
+
+///////TX 1//////
+
+
+    glBegin(GL_POLYGON);
+    if (UnPatientNum == 10) {
+        glColor3f(0, 1, 0);
+
+    } else {
+        glColor3f(1, 1, 0);
+    }
+    glVertex2f(625, 580);
+    glVertex2f(625 + 40, 580);
+    glVertex2f(625 + 40, 540);
+    glVertex2f(625, 540);
+    glEnd();
+    glFlush();
+
+    ///////TX 2//////
+    glBegin(GL_POLYGON);
+    glColor3f(1, 1, 0);
+    glVertex2f(725, 580);
+    glVertex2f(725 + 40, 580);
+    glVertex2f(725 + 40, 540);
+    glVertex2f(725, 540);
+    glEnd();
+    glFlush();
+
+
+    ///////BX 1//////
+    glBegin(GL_POLYGON);
+    glColor3f(1, 1, 0);
+    glVertex2f(815, 580);
+    glVertex2f(815 + 40, 580);
+    glVertex2f(815 + 40, 540);
+    glVertex2f(815, 540);
+    glEnd();
+    glFlush();
+
+    ///////BX 2//////
+    glBegin(GL_POLYGON);
+    glColor3f(1, 1, 0);
+    glVertex2f(915, 580);
+    glVertex2f(915 + 40, 580);
+    glVertex2f(915 + 40, 540);
+    glVertex2f(915, 540);
+    glEnd();
+    glFlush();
+
+    ///////IX 1//////
+    glBegin(GL_POLYGON);
+    glColor3f(1, 1, 0);
+    glVertex2f(1005, 580);
+    glVertex2f(1005 + 40, 580);
+    glVertex2f(1005 + 40, 540);
+    glVertex2f(1005, 540);
+    glEnd();
+    glFlush();
+
+    ///////IX 2//////
+    glBegin(GL_POLYGON);
+    glColor3f(1, 1, 0);
+    glVertex2f(1105, 580);
+    glVertex2f(1105 + 40, 580);
+    glVertex2f(1105 + 40, 540);
+    glVertex2f(1105, 540);
+    glEnd();
+    glFlush();
+
+    ///////RX 1//////
+    glBegin(GL_POLYGON);
+    glColor3f(1, 1, 0);
+    glVertex2f(1195, 580);
+    glVertex2f(1195 + 40, 580);
+    glVertex2f(1195 + 40, 540);
+    glVertex2f(1195, 540);
+    glEnd();
+    glFlush();
+
+
+    ///////RX 2//////
+    glBegin(GL_POLYGON);
+    glColor3f(1, 1, 0);
+    glVertex2f(1295, 580);
+    glVertex2f(1295 + 40, 580);
+    glVertex2f(1295 + 40, 540);
+    glVertex2f(1295, 540);
+    glEnd();
+    glFlush();
+
+    //////////CHAIRS//////
     for (int i = 700; i <= 1250; i += 50) {
-        glColor3f(1, 1, 1);
+        glColor3f(0, 1, 0);
 
         glBegin(GL_POLYGON);
         glVertex2f(i, 220);
@@ -320,7 +399,7 @@ void display() {
     }
 
     for (int i = 700; i <= 1250; i += 50) {
-        glColor3f(1, 1, 1);
+        glColor3f(0, 1, 0);
 
         glBegin(GL_POLYGON);
         glVertex2f(i, 180);
@@ -332,21 +411,16 @@ void display() {
 
     }
 
-
 }
 
 int main(int argc, char **argv) {
 
-
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
-
-
     glutInitWindowPosition(150, 250);
     glutInitWindowSize(1400, 700);
     glutCreateWindow("A Simple Triangle");
     glutDisplayFunc(display);
     glutMainLoop();
 }
-
 
