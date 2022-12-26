@@ -126,6 +126,7 @@ int main(int argc, char *argv[]) {
                     << "Unserved " << shm[0] << " Unhappy " << shm[1] << " Satisfied " << shm[2] << endl;
             fflush(stdout);
 
+
             if (shm[0] == data["Unserved"] || shm[1] == data["Unhappy"] || shm[2] == data["Satisfied"]){
                 cout << "one of the condition happen so the program will terminate " << endl;
                 kill(getppid(), SIGUSR1);
@@ -136,7 +137,7 @@ int main(int argc, char *argv[]) {
                 kill(getppid(), SIGUSR1);
 
             }
-
+            shmdt(shm);
             if ( semop(sem1, &release1, 1) == -1 ) {
                 perror("error in release the write semaphore");
                 exit(-1);
