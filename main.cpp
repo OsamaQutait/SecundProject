@@ -4,7 +4,8 @@ pid_t pid, wpid, rolling_gate_man, rolling_gate_woman, metal_gate_man, metal_gat
 vector<pid_t> pid_array;
 void handle_sigusr1(int sig);
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[]) {x
+
     signal(SIGUSR1, &handle_sigusr1);
     int status = 0;
     unordered_map<string, int> data;
