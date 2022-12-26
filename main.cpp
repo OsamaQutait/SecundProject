@@ -24,6 +24,8 @@ int main(int argc, char *argv[]) {
         }
         data_file.close();
     }
+    data["Male"] = (int)((double)data["total_number_of_people"]*((double)data["Male"]/(double)100));
+    data["Female"] = (int)((double)data["total_number_of_people"]*((double)data["Female"]/(double)100));
     // end reading
     char mail[3], femail[3], bx[3], ix[3], tx[3],
          rx[3], unserved[3], unhappy[3], satisfied[3];

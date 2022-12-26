@@ -1,10 +1,6 @@
-Male 4
-Female 6
-Bx 1
-Ix 1
-Tx 1
-Rx 1
-Hall_max_people 20
+total_number_of_people 10
+Male 40
+Female 60
 Unserved 4
 Unhappy 6
 Satisfied 5

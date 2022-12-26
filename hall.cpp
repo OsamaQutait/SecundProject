@@ -28,6 +28,8 @@ int main(int argc, char *argv[]) {
         }
         data_file.close();
     }
+    data["Male"] = (int)((double)data["total_number_of_people"]*((double)data["Male"]/(double)100));
+    data["Female"] = (int)((double)data["total_number_of_people"]*((double)data["Female"]/(double)100));
     // end reading
 
     if (!strcmp(argv[1], "hall_process")){
