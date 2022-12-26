@@ -78,7 +78,9 @@ int main(int argc, char *argv[]) {
             }
         }
         signal(SIGUSR1, &handle_sigusr1);
-        while (1);
+        while (1){
+            pause();
+        }
 
     }
 
@@ -120,7 +122,9 @@ int main(int argc, char *argv[]) {
 
 
         signal(SIGUSR2, &handle_sigusr3);
-        while (1);
+        while (1){
+            pause();
+        }
     }
 
     if (!strcmp(type, "mail")){
@@ -132,6 +136,7 @@ int main(int argc, char *argv[]) {
             perror("semget mail");
             exit(-2);
         }
+//        sleep(generate_waiting_time(1, 3));
         if ( semop(man_sem, &acquire, 1) == -1 ) {
             perror("semop1");
             exit(3);
@@ -165,6 +170,7 @@ int main(int argc, char *argv[]) {
             perror("semget female");
             exit(-2);
         }
+//        sleep(generate_waiting_time(1, 3));
         if ( semop(woman_sem, &acquire, 1) == -1 ) {
             perror("semop3");
             exit(3);

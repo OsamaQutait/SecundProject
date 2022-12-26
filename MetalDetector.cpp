@@ -7,8 +7,8 @@ int metal_gate_man,metal_gate_woman, rolling_gate_man, rolling_gate_woman;
 int generate_waiting_time(int lower, int upper);
 
 int main(int argc, char *argv[]) {
-    unordered_map<string, int> data;
     // read file
+    unordered_map<string, int> data;
     string line, word, num;
     fstream data_file;
     data_file.open("inputData.txt", ios::in);

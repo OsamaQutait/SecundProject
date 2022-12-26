@@ -35,6 +35,8 @@ using namespace std;
 #include <stdio.h>
 #include <string.h>
 #include <unordered_map>
+#include <sys/ipc.h>
+#include <sys/shm.h>
 #define RED     "\033[31m"      /* Red */
 #define GREEN   "\033[32m"      /* Green */
 #define BLUE    "\033[34m"      /* Blue */
